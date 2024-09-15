@@ -4,6 +4,9 @@ export const aggregateCommitsByDate = (commits: Commit[]) => {
   const dateMap: { [key: string]: number } = {}
 
   commits.forEach((commit) => {
+    if (!commit?.commit?.author?.date) {
+      return
+    }
     const date = new Date(commit.commit.author.date).toISOString().split('T')[0] // 'YYYY-MM-DD' 형식
     if (!dateMap[date]) {
       dateMap[date] = 0

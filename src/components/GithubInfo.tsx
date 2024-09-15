@@ -2,15 +2,22 @@ import { GitHubUserData } from '@/types'
 import { getGithubData } from '@/utils/getGithubData'
 import { useEffect, useState } from 'react'
 import Heatmap from './Heatmap'
+import { aggregateCommitsByDate } from '@/utils/aggregateCommitsByDate'
 
 interface GihubInfoProps {
   usernames: string[]
   fetching: boolean
 }
+interface Data {
+  date: string
+  count: number
+}
 
 export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   const [data, setData] = useState<GitHubUserData[]>([])
 
+  const [commitCounts, setCommitCounts] = useState<number[]>([])
+  const [aggregatedData, setAggregatedData] = useState<Data[]>([])
   useEffect(() => {
     if (!fetching) {
       return
@@ -18,8 +25,15 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
 
     async function fetchData() {
       const result = await getGithubData(usernames)
-      console.log('result', result)
       setData(result)
+
+      const commits = result
+        .map((user) => user.repos.map((repo) => repo.commits))
+        .flat()
+        .flat()
+      const aggregatedData = aggregateCommitsByDate(commits)
+      setAggregatedData(aggregatedData)
+      setCommitCounts(aggregatedData.map((d) => d.count))
     }
 
     fetchData()
@@ -27,14 +41,14 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
 
   return (
     <div className="text-black">
-      {data.map((user, index) => (
+      {data.map((user) => (
         <div key={user.username}>
           <div id="profile" className="flex flex-col flex-center gap-4">
             <img src={user.profile.avatar_url} alt={user.username} />
             {user.repos.length > 0 && (
               <>
                 <h1>GitHub Contribution Heatmap</h1>
-                <Heatmap username={user.username} repo={user.repos[index].repoName} />
+                <Heatmap commitCounts={commitCounts} aggregatedData={aggregatedData} />
               </>
             )}
           </div>

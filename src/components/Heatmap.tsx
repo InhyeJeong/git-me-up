@@ -1,10 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
-import { getCommits } from '@/app/api/getCommits'
-import { Commit } from '@/types'
 import FloatingCubes from './FloatingCubes'
-import { aggregateCommitsByDate } from '@/utils/aggregateCommitsByDate'
 
 interface Data {
   date: string
@@ -24,27 +21,17 @@ const getYearsRange = (yearsAhead: number): number[] => {
 
 const YEARS = getYearsRange(20)
 
-const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo }) => {
-  const [data, setData] = useState<Data[]>([])
-  const [year, setYear] = useState<number>(YEARS[0])
-  const [commitCounts, setCommitCounts] = useState<number[]>([])
+interface HeatmapProps {
+  commitCounts: number[]
+  aggregatedData: Data[]
+}
+
+const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData }) => {
+  const [year, setYear] = useState<number>(() => YEARS[0])
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setYear(Number(event.target.value))
   }
-
-  useEffect(() => {
-    const getData = async () => {
-      const startDate = `${year}-01-01T00:00:00Z` // 시작 날짜
-      const endDate = `${year}-12-31T23:59:59Z` // 끝 날짜
-      const commits: Commit[] = await getCommits(username, repo, startDate, endDate)
-      const aggregatedData = aggregateCommitsByDate(commits)
-      setData(aggregatedData)
-      setCommitCounts(aggregatedData.map((d) => d.count))
-    }
-
-    getData()
-  }, [username, repo, year])
 
   return (
     <div>
@@ -61,7 +48,7 @@ const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo 
       <CalendarHeatmap
         startDate={new Date(`${year}-01-01`)}
         endDate={new Date(`${year}-12-31`)}
-        values={data.map((d) => ({ date: d.date, count: d.count }))}
+        values={aggregatedData.map((d) => ({ date: d.date, count: d.count }))}
         classForValue={(value) => {
           if (!value) {
             return 'color-empty'
