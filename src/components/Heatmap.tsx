@@ -56,6 +56,14 @@ const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData }) => {
           return `color-github-${value.count}`
         }}
         showWeekdayLabels={true}
+        // FIXME: 툴팁 동작안함
+        // https://github.com/kevinsqi/react-calendar-heatmap/issues/205
+        tooltipDataAttrs={(value: { date: string; count: number }) => {
+          return {
+            'data-tip': `${value.date} has count: ${value.count}`,
+          }
+        }}
+        titleForValue={(value) => `Date is ${value?.date}`}
       />
     </div>
   )
