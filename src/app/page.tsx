@@ -26,7 +26,6 @@ export default function Home() {
           updateFetching={updateFetching}
         />
         <GithubInfo usernames={usernames} fetching={fetching} />
-        <h1>GitHub Contribution Heatmap</h1>
       </>
     </Container>
   )

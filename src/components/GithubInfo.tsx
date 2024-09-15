@@ -1,6 +1,7 @@
 import { GitHubUserData } from '@/types'
 import { getGithubData } from '@/utils/getGithubData'
 import { useEffect, useState } from 'react'
+import Heatmap from './Heatmap'
 
 interface GihubInfoProps {
   usernames: string[]
@@ -26,7 +27,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
 
   return (
     <div className="text-black">
-      {data.map((user) => (
+      {data.map((user, index) => (
         <div key={user.username}>
           <img src={user.profile.avatar_url} alt={user.username} />
           <h2>{user.profile.name}</h2>
@@ -39,6 +40,12 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
               </li>
             ))}
           </ul>
+          {user.repos.length > 0 && (
+            <>
+              <h1>GitHub Contribution Heatmap</h1>
+              <Heatmap username={user.username} repo={user.repos[index].repoName} />
+            </>
+          )}
         </div>
       ))}
     </div>
