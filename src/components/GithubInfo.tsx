@@ -29,7 +29,15 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
     <div className="text-black">
       {data.map((user, index) => (
         <div key={user.username}>
-          <img src={user.profile.avatar_url} alt={user.username} />
+          <div id="profile" className="flex flex-col flex-center gap-4">
+            <img src={user.profile.avatar_url} alt={user.username} />
+            {user.repos.length > 0 && (
+              <>
+                <h1>GitHub Contribution Heatmap</h1>
+                <Heatmap username={user.username} repo={user.repos[index].repoName} />
+              </>
+            )}
+          </div>
           <h2>{user.profile.name}</h2>
           <p>{user.profile.bio}</p>
           <ul>
@@ -40,12 +48,6 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
               </li>
             ))}
           </ul>
-          {user.repos.length > 0 && (
-            <>
-              <h1>GitHub Contribution Heatmap</h1>
-              <Heatmap username={user.username} repo={user.repos[index].repoName} />
-            </>
-          )}
         </div>
       ))}
     </div>

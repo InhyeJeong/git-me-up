@@ -1,27 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
-import CubeScene from './CubeScene'
 import { getCommits } from '@/app/api/getCommits'
 import { Commit } from '@/types'
-
-// 커밋 데이터를 집계하는 함수
-const aggregateCommitsByDate = (commits: Commit[]) => {
-  const dateMap: { [key: string]: number } = {}
-
-  commits.forEach((commit) => {
-    const date = new Date(commit.commit.author.date).toISOString().split('T')[0] // 'YYYY-MM-DD' 형식
-    if (!dateMap[date]) {
-      dateMap[date] = 0
-    }
-    dateMap[date] += 1
-  })
-
-  return Object.keys(dateMap).map((date) => ({
-    date,
-    count: dateMap[date],
-  }))
-}
+import FloatingCubes from './FloatingCubes'
+import { aggregateCommitsByDate } from '@/utils/aggregateCommitsByDate'
 
 interface Data {
   date: string
@@ -65,6 +48,8 @@ const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo 
 
   return (
     <div>
+      <FloatingCubes commitCounts={commitCounts} />
+
       <label htmlFor="year">Select Year:</label>
       <select id="year" value={year} onChange={handleYearChange}>
         {YEARS.map((year) => (
@@ -85,7 +70,6 @@ const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo 
         }}
         showWeekdayLabels={true}
       />
-      <CubeScene commitCounts={commitCounts} />
     </div>
   )
 }
