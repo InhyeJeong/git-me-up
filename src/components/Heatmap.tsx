@@ -1,8 +1,9 @@
+import React, { useEffect, useState } from 'react'
+import CalendarHeatmap from 'react-calendar-heatmap'
+import 'react-calendar-heatmap/dist/styles.css'
+import CubeScene from './CubeScene'
 import { getCommits } from '@/app/api/getCommits'
 import { Commit } from '@/types'
-import React, { useEffect, useState } from 'react'
-import CalendarHeatmap, { ReactCalendarHeatmapValue } from 'react-calendar-heatmap'
-import 'react-calendar-heatmap/dist/styles.css'
 
 // 커밋 데이터를 집계하는 함수
 const aggregateCommitsByDate = (commits: Commit[]) => {
@@ -42,8 +43,8 @@ const YEARS = getYearsRange(20)
 
 const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo }) => {
   const [data, setData] = useState<Data[]>([])
-
   const [year, setYear] = useState<number>(YEARS[0])
+  const [commitCounts, setCommitCounts] = useState<number[]>([])
 
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setYear(Number(event.target.value))
@@ -56,6 +57,7 @@ const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo 
       const commits: Commit[] = await getCommits(username, repo, startDate, endDate)
       const aggregatedData = aggregateCommitsByDate(commits)
       setData(aggregatedData)
+      setCommitCounts(aggregatedData.map((d) => d.count))
     }
 
     getData()
@@ -83,6 +85,7 @@ const Heatmap: React.FC<{ username: string; repo: string }> = ({ username, repo 
         }}
         showWeekdayLabels={true}
       />
+      <CubeScene commitCounts={commitCounts} />
     </div>
   )
 }
