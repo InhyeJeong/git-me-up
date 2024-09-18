@@ -53,7 +53,12 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
 
   return (
     <div className="flex flex-col items-center w-full space-y-6 bg-transparent p-8">
-      <h1 className="text-5xl font-extrabold text-gray-100 mb-6 tracking-tight">Git me up</h1>
+      <h1 className="text-6xl font-bold mb-8 flex items-center justify-center space-x-4">
+        <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-300 to-red-500">
+          Git me up
+        </span>
+      </h1>
+
       <div className="w-full max-w-lg space-y-6">
         {inputValues.map((username, index) => (
           <div key={index} className="relative flex items-center">
