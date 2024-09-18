@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <Container>
       <>
-        <FloatingCubes commitCounts={commitCounts} />
+        <FloatingCubes commitCounts={commitCounts.sort(() => Math.random() - 0.5)} />
         <UserInputForm
           usernames={usernames}
           updateUserNames={updateUserName}

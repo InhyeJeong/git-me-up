@@ -55,33 +55,32 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
           <div className="flex items-center gap-4">
             <img src={user.profile.avatar_url} alt={user.username} className="rounded-full w-20 h-20 object-cover" />
             <div>
-              <h2 className="text-xl font-semibold">{user.profile.name}</h2>
-              <p className="text-sm text-gray-400">{user.profile.bio}</p>
+              <h2 className="text-xl font-semibold">{user.username}</h2>
+              <p className="text-sm">{user.profile.bio || 'No bio available'}</p>
             </div>
-          </div>
-
-          {user.repos.length > 0 && (
-            <>
-              <h1 className="mt-8 text-2xl font-bold">GitHub Contribution Heatmap</h1>
-              <Heatmap aggregatedData={aggregatedData} years={YEARS} year={year} onChnageYear={(year) => setYear(year)} />
-            </>
-          )}
-
-          <div className="mt-6">
-            <h3 className="text-lg font-medium">Repositories</h3>
-            <ul className="mt-4">
-              {user.repos.map((repo) => (
-                <li key={repo.repoName} className="bg-white bg-opacity-20 rounded-lg p-4 mb-2 flex justify-between">
-                  <div>
-                    <h4 className="text-lg font-semibold">{repo.repoName}</h4>
-                    <p className="text-sm text-gray-400">Commits: {repo.commits.length}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       ))}
+      <div>
+        {usernames.length === 1 &&
+          data.map((user) => (
+            <div key={user.username}>
+              <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>
+              <ul className="mt-4">
+                {user.repos.map((repo) => (
+                  <li key={repo.repoName} className="border border-gray-700 p-3 rounded-lg mb-2">
+                    <a href={`https://github.com/${user.username}/${repo.repoName}`} className="text-blue-400 hover:underline">
+                      {repo.repoName}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+      </div>
+      {usernames[0] !== '' && (
+        <Heatmap aggregatedData={aggregatedData} onChnageYear={(year) => setYear(year)} year={year} years={YEARS} />
+      )}
     </div>
   )
 }

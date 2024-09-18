@@ -42,42 +42,48 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
   }
 
   return (
-    <div className="flex flex-col items-center space-y-4 bg-transparent p-8">
-      <h1 className="text-4xl font-bold text-gray-100 mb-6">Git me up</h1>
-      <div className="w-full max-w-lg space-y-4">
+    <div className="flex flex-col items-center w-full space-y-6 bg-transparent p-8">
+      <h1 className="text-5xl font-extrabold text-gray-100 mb-6 tracking-tight">Git me up</h1>
+      <div className="w-full max-w-lg space-y-6">
         {usernames.map((username, index) => (
-          <div key={index} className="flex space-x-4 items-center">
+          <div key={index} className="relative flex items-center">
             <input
               type="text"
               value={username}
               onChange={(e) => handleInputChange(e.target.value, index)}
               placeholder="Enter GitHub username"
-              className="flex-grow p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-800 placeholder-gray-500"
+              className="flex-grow p-4 bg-gray-900 border-2 border-transparent focus:border-indigo-500 rounded-lg shadow-lg focus:ring-2 focus:ring-indigo-600 transition duration-300 text-white placeholder-gray-500"
             />
             {usernames.length > 1 && (
-              <button type="button" onClick={() => handleRemoveInput(index)} className="text-red-500 hover:text-red-700">
-                X
+              <button
+                type="button"
+                onClick={() => handleRemoveInput(index)}
+                className="absolute right-4 text-red-500 hover:text-red-700 transition duration-200"
+              >
+                ✖
               </button>
             )}
           </div>
         ))}
       </div>
-      <button
-        type="button"
-        onClick={handleAddInput}
-        className="px-4 py-2 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition duration-300 ease-in-out"
-      >
-        + Add another username
-      </button>
-      <button
-        className={`mt-4 px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition duration-300 ease-in-out ${
-          usernames.some((username) => !username) ? 'opacity-50 cursor-not-allowed' : ''
-        }`}
-        disabled={usernames.some((username) => !username) || fetching}
-        onClick={handleFetchData}
-      >
-        {fetching ? 'Fetching...' : 'Fetch Data'}
-      </button>
+      <div className="flex gap-2">
+        <button
+          type="button"
+          onClick={handleAddInput}
+          className="px-6 py-3 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white rounded-lg shadow-lg hover:scale-105 transition-transform duration-300 ease-in-out"
+        >
+          + Add Username
+        </button>
+        <button
+          className={`px-8 py-4 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300 ease-in-out ${
+            usernames.some((username) => !username) ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
+          disabled={usernames.some((username) => !username) || fetching}
+          onClick={handleFetchData}
+        >
+          {fetching ? 'Fetching...' : 'Submit'}
+        </button>
+      </div>
     </div>
   )
 }
