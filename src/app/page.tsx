@@ -10,7 +10,7 @@ export default function Home() {
   const [usernames, setUsernames] = useState<string[]>([''])
   const [fetching, setFetching] = useState(false)
 
-  const commitCounts = useCommitCountsStore((state) => state.commitCounts)
+  const commits = useCommitCountsStore((state) => state.commits)
 
   const updateUserName = (usernames: string[]) => {
     setUsernames(usernames)
@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <Container>
       <>
-        <FloatingCubes commitCounts={commitCounts.sort(() => Math.random() - 0.5)} />
+        <FloatingCubes commits={commits.sort(() => Math.random() - 0.5)} />
         <UserInputForm
           usernames={usernames}
           updateUserNames={updateUserName}

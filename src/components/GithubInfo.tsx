@@ -22,7 +22,7 @@ interface Data {
 export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   const [data, setData] = useState<GitHubUserData[]>([])
   const [year, setYear] = useState<number>(() => YEARS[0])
-  const updateCommitCounts = useCommitCountsStore((state) => state.updateCommitCounts)
+  const updateCommitCounts = useCommitCountsStore((state) => state.updateCommits)
   const [aggregatedData, setAggregatedData] = useState<Data[]>([])
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
         .flat()
       const aggregatedData = aggregateCommitsByDate(commits)
       setAggregatedData(aggregatedData)
-      updateCommitCounts(aggregatedData.map((d) => d.count))
+      updateCommitCounts(aggregatedData)
     }
 
     fetchData()

@@ -1,11 +1,16 @@
 import { create } from 'zustand'
 
+export interface CommitData {
+  date: string
+  count: number
+}
+
 interface CommitCountsStore {
-  commitCounts: number[]
-  updateCommitCounts: (data: number[]) => void
+  commits: CommitData[]
+  updateCommits: (data: CommitData[]) => void
 }
 
 export const useCommitCountsStore = create<CommitCountsStore>()((set) => ({
-  commitCounts: [],
-  updateCommitCounts: (data: number[]) => set({ commitCounts: data }),
+  commits: [],
+  updateCommits: (data: CommitData[]) => set({ commits: data }),
 }))
