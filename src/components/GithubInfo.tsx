@@ -46,7 +46,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   }, [fetching, updateCommitCounts, usernames, year])
 
   return (
-    <div className="text-white">
+    <div className="text-white w-full mx-8">
       {data.map((user) => (
         <div
           key={user.username}
@@ -74,7 +74,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
         {usernames.length === 1 &&
           data.map((user) => (
             <div key={user.username}>
-              <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>
+              {user.repos.length > 0 && <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>}
               <ul className="mt-4">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
                   {user.repos.map((repo) => (
