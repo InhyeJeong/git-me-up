@@ -12,7 +12,7 @@ export default function Home() {
     setUsernames(usernames)
   }
 
-  const updateFetching = (fetching: boolean) => {
+  const updateFetchingStatus = (fetching: boolean) => {
     setFetching(fetching)
   }
 
@@ -23,7 +23,7 @@ export default function Home() {
           usernames={usernames}
           updateUserNames={updateUserName}
           fetching={fetching}
-          updateFetching={updateFetching}
+          updateFetchingStatus={updateFetchingStatus}
         />
         <GithubInfo usernames={usernames} fetching={fetching} />
       </>

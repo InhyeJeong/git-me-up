@@ -3,6 +3,9 @@ import { getGithubData } from '@/utils/getGithubData'
 import { useEffect, useState } from 'react'
 import Heatmap from './Heatmap'
 import { aggregateCommitsByDate } from '@/utils/aggregateCommitsByDate'
+import { getYearsRange } from '@/utils/getYearsRange'
+
+const YEARS = getYearsRange(20)
 
 interface GihubInfoProps {
   usernames: string[]
@@ -16,15 +19,17 @@ interface Data {
 export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   const [data, setData] = useState<GitHubUserData[]>([])
 
+  const [year, setYear] = useState<number>(() => YEARS[0])
+
   const [commitCounts, setCommitCounts] = useState<number[]>([])
   const [aggregatedData, setAggregatedData] = useState<Data[]>([])
   useEffect(() => {
-    if (!fetching) {
+    if (fetching) {
       return
     }
 
     async function fetchData() {
-      const result = await getGithubData(usernames)
+      const result = await getGithubData(usernames, year)
       setData(result)
 
       const commits = result
@@ -37,7 +42,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
     }
 
     fetchData()
-  }, [fetching, usernames])
+  }, [fetching, usernames, year])
 
   return (
     <div className="text-black">
@@ -48,7 +53,15 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
             {user.repos.length > 0 && (
               <>
                 <h1>GitHub Contribution Heatmap</h1>
-                <Heatmap commitCounts={commitCounts} aggregatedData={aggregatedData} />
+                <Heatmap
+                  commitCounts={commitCounts}
+                  aggregatedData={aggregatedData}
+                  years={YEARS}
+                  year={year}
+                  onChnageYear={(year) => {
+                    setYear(year)
+                  }}
+                />
               </>
             )}
           </div>

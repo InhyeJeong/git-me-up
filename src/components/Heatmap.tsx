@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
 import FloatingCubes from './FloatingCubes'
@@ -8,29 +8,17 @@ interface Data {
   count: number
 }
 
-const getYearsRange = (yearsAhead: number): number[] => {
-  const currentYear = new Date().getFullYear()
-  const years: number[] = []
-
-  for (let i = 0; i <= yearsAhead; i++) {
-    years.push(currentYear - i)
-  }
-
-  return years
-}
-
-const YEARS = getYearsRange(20)
-
 interface HeatmapProps {
   commitCounts: number[]
   aggregatedData: Data[]
+  onChnageYear: (year: number) => void
+  year: number
+  years: number[]
 }
 
-const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData }) => {
-  const [year, setYear] = useState<number>(() => YEARS[0])
-
+const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData, year, years, onChnageYear }) => {
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setYear(Number(event.target.value))
+    onChnageYear(Number(event.target.value))
   }
 
   return (
@@ -39,7 +27,7 @@ const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData }) => {
 
       <label htmlFor="year">Select Year:</label>
       <select id="year" value={year} onChange={handleYearChange}>
-        {YEARS.map((year) => (
+        {years.map((year) => (
           <option key={year} value={year}>
             {year}
           </option>

@@ -4,10 +4,10 @@ interface UserInputFormProps {
   usernames: string[]
   updateUserNames: (usernames: string[]) => void
   fetching: boolean
-  updateFetching: (fetching: boolean) => void
+  updateFetchingStatus: (fetching: boolean) => void
 }
 
-export default function UserInputForm({ usernames, updateUserNames, fetching, updateFetching }: UserInputFormProps) {
+export default function UserInputForm({ usernames, updateUserNames, fetching, updateFetchingStatus }: UserInputFormProps) {
   const handleAddInput = () => {
     updateUserNames([...usernames, ''])
   }
@@ -22,7 +22,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
   }
 
   const handleFetchData = async () => {
-    updateFetching(true)
+    updateFetchingStatus(true)
     try {
       const responses = await Promise.all(
         usernames.map(async (username) => {
@@ -37,7 +37,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
     } catch (error) {
       console.error('Error fetching GitHub data:', error)
     } finally {
-      updateFetching(false)
+      updateFetchingStatus(false)
     }
   }
 
