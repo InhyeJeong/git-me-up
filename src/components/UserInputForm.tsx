@@ -42,8 +42,8 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
   }
 
   return (
-    <div className="flex flex-col items-center space-y-4 bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-gray-800 mb-6">GitHub Profile Analyzer</h1>
+    <div className="flex flex-col items-center space-y-4 bg-transparent p-8">
+      <h1 className="text-4xl font-bold text-gray-100 mb-6">Git me up</h1>
       <div className="w-full max-w-lg space-y-4">
         {usernames.map((username, index) => (
           <div key={index} className="flex space-x-4 items-center">

@@ -3,10 +3,14 @@ import { Container } from '@/components/Container'
 import GithubInfo from '@/components/GithubInfo'
 import UserInputForm from '@/components/UserInputForm'
 import { useState } from 'react'
+import { useCommitCountsStore } from './store/githubInfoStore'
+import FloatingCubes from '@/components/FloatingCubes'
 
 export default function Home() {
   const [usernames, setUsernames] = useState<string[]>([''])
   const [fetching, setFetching] = useState(false)
+
+  const commitCounts = useCommitCountsStore((state) => state.commitCounts)
 
   const updateUserName = (usernames: string[]) => {
     setUsernames(usernames)
@@ -19,6 +23,7 @@ export default function Home() {
   return (
     <Container>
       <>
+        <FloatingCubes commitCounts={commitCounts} />
         <UserInputForm
           usernames={usernames}
           updateUserNames={updateUserName}

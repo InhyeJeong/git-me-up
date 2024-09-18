@@ -1,7 +1,6 @@
 import React from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
-import FloatingCubes from './FloatingCubes'
 
 interface Data {
   date: string
@@ -9,24 +8,23 @@ interface Data {
 }
 
 interface HeatmapProps {
-  commitCounts: number[]
   aggregatedData: Data[]
   onChnageYear: (year: number) => void
   year: number
   years: number[]
 }
 
-const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData, year, years, onChnageYear }) => {
+const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChnageYear }) => {
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onChnageYear(Number(event.target.value))
   }
 
   return (
     <div>
-      <FloatingCubes commitCounts={commitCounts} />
-
-      <label htmlFor="year">Select Year:</label>
-      <select id="year" value={year} onChange={handleYearChange}>
+      <label htmlFor="year" className="select-label">
+        Select Year:
+      </label>
+      <select id="year" value={year} onChange={handleYearChange} className="bg-white text-black rounded-md p-1 ml-2 mt-2 mb-2">
         {years.map((year) => (
           <option key={year} value={year}>
             {year}
@@ -44,8 +42,6 @@ const Heatmap: React.FC<HeatmapProps> = ({ commitCounts, aggregatedData, year, y
           return `color-github-${value.count}`
         }}
         showWeekdayLabels={true}
-        // FIXME: 툴팁 동작안함
-        // https://github.com/kevinsqi/react-calendar-heatmap/issues/205
         tooltipDataAttrs={(value: { date: string; count: number }) => {
           return {
             'data-tip': `${value.date} has count: ${value.count}`,
