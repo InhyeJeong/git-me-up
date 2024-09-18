@@ -1,4 +1,6 @@
 import { getProfile } from '@/app/api/getProfile'
+import { Center, OrbitControls, Text3D } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
 import { useState } from 'react'
 
 interface UserInputFormProps {
@@ -53,11 +55,28 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
 
   return (
     <div className="flex flex-col items-center w-full space-y-6 bg-transparent p-8">
-      <h1 className="text-6xl font-bold mb-8 flex items-center justify-center space-x-4">
-        <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-pink-300 to-red-500">
-          Git me up
-        </span>
-      </h1>
+      <Canvas orthographic camera={{ position: [0, 0, 100], zoom: 10 }} className="cursor-pointer">
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[10, 10, 10]} />
+        <Center rotation={[-0.5, -0.25, 0]}>
+          <Text3D
+            curveSegments={32}
+            bevelEnabled
+            bevelSize={0.04}
+            bevelThickness={0.5}
+            height={0.5}
+            lineHeight={0.5}
+            letterSpacing={-0.06}
+            size={10}
+            font="/Inter_Bold.json"
+          >
+            Git me up
+            <meshNormalMaterial />
+          </Text3D>
+        </Center>
+        <axesHelper scale={10} position={[0, 0, 0]} onUpdate={(self) => self.setColors('#ff2080', '#20ff80', '#2080ff')} />
+        <OrbitControls enableZoom={false} enablePan={false} minPolarAngle={Math.PI / 2} maxPolarAngle={Math.PI / 2} />
+      </Canvas>
 
       <div className="w-full max-w-lg space-y-6">
         {inputValues.map((username, index) => (
