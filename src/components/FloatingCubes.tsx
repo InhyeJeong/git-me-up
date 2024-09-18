@@ -32,16 +32,19 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
   return (
     <mesh ref={meshRef} position={position} castShadow>
       <RoundedBox args={[1, 1, 1]} radius={0.1} smoothness={4}>
-        <meshPhysicalMaterial
-          color={color}
-          roughness={0}
-          transmission={0.9} // 투명도
-          thickness={0.5} // 두께 (유리 두께 느낌)
-          reflectivity={1} // 반사율
-        />
+        <meshPhysicalMaterial color={color} roughness={0.1} transmission={0.9} thickness={0.5} reflectivity={0.6} />
       </RoundedBox>
-      <Text position={[0, 0, 0.6]} fontSize={0.12} color="white" outlineWidth={0.02} outlineColor="black">
-        {`${date}\nCount: ${count}`}
+
+      <Text
+        position={[0, 0, 0.7]}
+        fontSize={0.15}
+        color="white"
+        outlineWidth={0.01}
+        outlineColor="black"
+        anchorX="center"
+        anchorY="middle"
+      >
+        {`${date}\n  Count: ${count}`}
       </Text>
     </mesh>
   )
