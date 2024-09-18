@@ -9,14 +9,14 @@ interface Data {
 
 interface HeatmapProps {
   aggregatedData: Data[]
-  onChnageYear: (year: number) => void
+  onChangeYear: (year: number) => void
   year: number
   years: number[]
 }
 
-const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChnageYear }) => {
+const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChangeYear }) => {
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    onChnageYear(Number(event.target.value))
+    onChangeYear(Number(event.target.value))
   }
 
   return (

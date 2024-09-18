@@ -1,4 +1,5 @@
 import { getProfile } from '@/app/api/getProfile'
+import { useState } from 'react'
 
 interface UserInputFormProps {
   usernames: string[]
@@ -8,24 +9,33 @@ interface UserInputFormProps {
 }
 
 export default function UserInputForm({ usernames, updateUserNames, fetching, updateFetchingStatus }: UserInputFormProps) {
+  const [inputValues, setInputValues] = useState(usernames)
+
   const handleAddInput = () => {
-    updateUserNames([...usernames, ''])
+    setInputValues([...inputValues, ''])
   }
 
   const handleRemoveInput = (index: number) => {
-    updateUserNames(usernames.filter((_, i) => i !== index))
+    const updatedValues = inputValues.filter((_, i) => i !== index)
+    setInputValues(updatedValues)
+    updateUserNames(updatedValues)
   }
 
   const handleInputChange = (value: string, index: number) => {
-    const updatedUsernames = usernames.map((username, i) => (i === index ? value : username))
-    updateUserNames(updatedUsernames)
+    const updatedValues = inputValues.map((username, i) => (i === index ? value : username))
+    setInputValues(updatedValues)
+  }
+
+  const handleSubmit = () => {
+    updateUserNames(inputValues)
+    handleFetchData()
   }
 
   const handleFetchData = async () => {
     updateFetchingStatus(true)
     try {
       const responses = await Promise.all(
-        usernames.map(async (username) => {
+        inputValues.map(async (username) => {
           const profile = await getProfile(username)
           if (!profile) {
             throw new Error(`Error fetching data for ${username}`)
@@ -45,7 +55,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
     <div className="flex flex-col items-center w-full space-y-6 bg-transparent p-8">
       <h1 className="text-5xl font-extrabold text-gray-100 mb-6 tracking-tight">Git me up</h1>
       <div className="w-full max-w-lg space-y-6">
-        {usernames.map((username, index) => (
+        {inputValues.map((username, index) => (
           <div key={index} className="relative flex items-center">
             <input
               type="text"
@@ -54,7 +64,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
               placeholder="Enter GitHub username"
               className="flex-grow p-4 bg-gray-900 border-2 border-transparent focus:border-indigo-500 rounded-lg shadow-lg focus:ring-2 focus:ring-indigo-600 transition duration-300 text-white placeholder-gray-500"
             />
-            {usernames.length > 1 && (
+            {inputValues.length > 1 && (
               <button
                 type="button"
                 onClick={() => handleRemoveInput(index)}
@@ -66,7 +76,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
           </div>
         ))}
       </div>
-      <div className="flex gap-2">
+      <div className="flex gap-2 mt-4">
         <button
           type="button"
           onClick={handleAddInput}
@@ -76,10 +86,10 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
         </button>
         <button
           className={`px-8 py-4 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300 ease-in-out ${
-            usernames.some((username) => !username) ? 'opacity-50 cursor-not-allowed' : ''
+            inputValues.some((username) => !username) ? 'opacity-50 cursor-not-allowed' : ''
           }`}
-          disabled={usernames.some((username) => !username) || fetching}
-          onClick={handleFetchData}
+          disabled={inputValues.some((username) => !username) || fetching}
+          onClick={handleSubmit}
         >
           {fetching ? 'Fetching...' : 'Submit'}
         </button>

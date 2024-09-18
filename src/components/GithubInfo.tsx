@@ -67,19 +67,22 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
             <div key={user.username}>
               <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>
               <ul className="mt-4">
-                {user.repos.map((repo) => (
-                  <li key={repo.repoName} className="border border-gray-700 p-3 rounded-lg mb-2">
-                    <a href={`https://github.com/${user.username}/${repo.repoName}`} className="text-blue-400 hover:underline">
-                      {repo.repoName}
-                    </a>
-                  </li>
-                ))}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+                  {user.repos.map((repo) => (
+                    <li key={repo.repoName} className="bg-white bg-opacity-20 rounded-lg p-4 flex justify-between">
+                      <div>
+                        <h4 className="text-lg font-semibold">{repo.repoName}</h4>
+                        <p className="text-sm text-gray-400">Commits: {repo.commits.length}</p>
+                      </div>
+                    </li>
+                  ))}
+                </div>
               </ul>
             </div>
           ))}
       </div>
       {usernames[0] !== '' && (
-        <Heatmap aggregatedData={aggregatedData} onChnageYear={(year) => setYear(year)} year={year} years={YEARS} />
+        <Heatmap aggregatedData={aggregatedData} onChangeYear={(year) => setYear(year)} year={year} years={YEARS} />
       )}
     </div>
   )
