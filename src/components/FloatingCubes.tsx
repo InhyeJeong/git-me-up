@@ -3,25 +3,21 @@ import { Canvas } from '@react-three/fiber'
 import { PerspectiveCamera, Text } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
-import { CommitData } from '@/app/store/githubInfoStore'
+import { RoundedBox } from '@react-three/drei'
 
 interface FloatingCubesProps {
-  commits: CommitData[]
+  commits: { date: string; count: number }[]
 }
 
-const colorScale = [
-  '#eeeeee', // color-github-0
-  '#d6e685', // color-github-1
-  '#8cc665', // color-github-2
-  '#44a340', // color-github-3
-  '#1e6823', // color-github-4
-]
+const colorScale = ['#eeeeee', '#d6e685', '#8cc665', '#44a340', '#1e6823']
+
 interface FloatingCubeProps {
   position: [number, number, number]
   color: string
   date: string
   count: number
 }
+
 const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
   const meshRef = React.useRef<THREE.Mesh>(null!)
 
@@ -34,11 +30,18 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
   })
 
   return (
-    <mesh ref={meshRef} position={position}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={color} />
-      <Text position={[0, 0, 0.6]} fontSize={0.15} color="black">
-        {`${date}\nCount : ${count}`}
+    <mesh ref={meshRef} position={position} castShadow>
+      <RoundedBox args={[1, 1, 1]} radius={0.1} smoothness={4}>
+        <meshPhysicalMaterial
+          color={color}
+          roughness={0}
+          transmission={0.9} // 투명도
+          thickness={0.5} // 두께 (유리 두께 느낌)
+          reflectivity={1} // 반사율
+        />
+      </RoundedBox>
+      <Text position={[0, 0, 0.6]} fontSize={0.12} color="white" outlineWidth={0.02} outlineColor="black">
+        {`${date}\nCount: ${count}`}
       </Text>
     </mesh>
   )
@@ -47,11 +50,11 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
 const FloatingCubes: React.FC<FloatingCubesProps> = ({ commits }) => {
   return (
     <div id="scene">
-      <Canvas style={{ width: '100%', height: '100%' }}>
+      <Canvas shadows style={{ width: '100%', height: '100%' }}>
         <PerspectiveCamera makeDefault position={[0, 0, 10]} />
         <ambientLight intensity={0.5} />
-        <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} />
-        <pointLight position={[-10, -10, -10]} intensity={1} />
+        <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} castShadow />
+        <pointLight position={[-10, -10, -10]} intensity={1} castShadow />
         {commits.map((commit, i) => (
           <FloatingCube
             key={i}
