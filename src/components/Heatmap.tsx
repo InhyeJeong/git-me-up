@@ -20,11 +20,9 @@ const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChange
   }
 
   return (
-    <div>
-      <label htmlFor="year" className="select-label">
-        Select Year:
-      </label>
-      <select id="year" value={year} onChange={handleYearChange} className="bg-white text-black rounded-md p-1 ml-2 mt-2 mb-2">
+    <div className="mt-4">
+      <hr />
+      <select id="year" value={year} onChange={handleYearChange} className="bg-white text-black rounded-md p-1 ml-2 mt-4 mb-2">
         {years.map((year) => (
           <option key={year} value={year}>
             {year}

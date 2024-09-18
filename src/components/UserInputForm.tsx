@@ -85,7 +85,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
           + Add Username
         </button>
         <button
-          className={`px-8 py-4 bg-green-600 text-white rounded-lg shadow-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300 ease-in-out ${
+          className={`px-8 py-4 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 hover:text-white transition-all duration-300 ease-in-out transform hover:scale-105 ${
             inputValues.some((username) => !username) ? 'opacity-50 cursor-not-allowed' : ''
           }`}
           disabled={inputValues.some((username) => !username) || fetching}
