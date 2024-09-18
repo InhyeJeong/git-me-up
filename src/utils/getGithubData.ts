@@ -2,6 +2,7 @@ import { getCommits } from '@/app/api/getCommits'
 import { getOrgRepos } from '@/app/api/getOrgRepos'
 import { getProfile } from '@/app/api/getProfile'
 import { getRepos } from '@/app/api/getRepos'
+import { RepoWithCommits } from '@/types'
 
 export async function getGithubData(usernames: string[], year?: number) {
   const result = await Promise.all(
@@ -17,10 +18,17 @@ export async function getGithubData(usernames: string[], year?: number) {
 
       const allRepos = [...repos, ...orgRepos]
 
-      const repoCommits = await Promise.all(
+      const repoCommits: RepoWithCommits[] = await Promise.all(
         allRepos.map(async (repo) => ({
           repoName: repo.name,
           commits: await getCommits(username, repo.name, startDate, endDate),
+          description: repo.description,
+          is_template: repo.is_template,
+          stargazers_count: repo.stargazers_count,
+          language: repo.language,
+          license: repo?.license,
+          updated_at: repo.updated_at,
+          fork: repo.fork,
         }))
       )
 

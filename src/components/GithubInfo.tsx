@@ -5,6 +5,8 @@ import Heatmap from './Heatmap'
 import { aggregateCommitsByDate } from '@/utils/aggregateCommitsByDate'
 import { getYearsRange } from '@/utils/getYearsRange'
 import { useCommitCountsStore } from '@/app/store/githubInfoStore'
+import { UserProfile } from './UserProfile'
+import { RepositoryData } from './RepositoryData'
 
 const YEARS = getYearsRange(20)
 
@@ -52,49 +54,21 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
           key={user.username}
           className="bg-black bg-opacity-20 rounded-lg p-6 mb-8 shadow-lg transition-transform hover:-translate-y-1"
         >
-          <div className="flex items-center gap-4">
-            <img src={user.profile.avatar_url} alt={user.username} className="rounded-full w-20 h-20 object-cover" />
-            <div>
-              <h2 className="text-xl font-semibold">
-                <a
-                  href={`https://github.com/${user.username}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  {user.profile.name || user.username}
-                </a>
-              </h2>
-              <p className="text-sm">{user.profile.bio || 'No bio available'}</p>
-            </div>
-          </div>
+          <UserProfile profile={user.profile} />
         </div>
       ))}
       <div>
         {usernames.length === 1 &&
           data.map((user) => (
             <div key={user.username}>
-              {user.repos.length > 0 && <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>}
-              <ul className="mt-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
-                  {user.repos.map((repo) => (
-                    <li key={repo.repoName} className="bg-white bg-opacity-20 rounded-lg p-4 flex justify-between">
-                      <a
-                        key={repo.repoName}
-                        href={`https://github.com/${user.username}/${repo.repoName}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:scale-105 w-full h-full"
-                      >
-                        <div>
-                          <h4 className="text-lg font-semibold">{repo.repoName}</h4>
-                          <p className="text-sm text-gray-400">Commits: {repo.commits.length}</p>
-                        </div>
-                      </a>
-                    </li>
-                  ))}
-                </div>
-              </ul>
+              {user.repos.length > 0 && (
+                <>
+                  <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>
+                  <ul className="mt-4">
+                    <RepositoryData user={user} />
+                  </ul>
+                </>
+              )}
             </div>
           ))}
       </div>
