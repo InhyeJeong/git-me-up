@@ -30,7 +30,7 @@ export default function Title() {
     <Canvas orthographic camera={{ position: [0, 0, 100], zoom: 10 }} className="cursor-pointer">
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 10]} />
-      <Center rotation={[-0.5, -0.25, 0]}>
+      <Center rotation={window.innerWidth < MOBILE_WIDTH ? [-0.5, -0.75, 0] : [-0.5, -0.25, 0]}>
         <Text3D
           curveSegments={32}
           bevelEnabled
