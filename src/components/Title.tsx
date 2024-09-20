@@ -8,14 +8,12 @@ const MOBILE_FONT_SIZE = 6
 
 export default function Title() {
   const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE)
+  const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < MOBILE_WIDTH) {
-        setFontSize(MOBILE_FONT_SIZE)
-      } else {
-        setFontSize(DEFAULT_FONT_SIZE)
-      }
+      setIsMobile(window.innerWidth < MOBILE_WIDTH)
+      setFontSize(window.innerWidth < MOBILE_WIDTH ? MOBILE_FONT_SIZE : DEFAULT_FONT_SIZE)
     }
 
     window.addEventListener('resize', handleResize)
@@ -30,7 +28,7 @@ export default function Title() {
     <Canvas orthographic camera={{ position: [0, 0, 100], zoom: 10 }} className="cursor-pointer">
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 10]} />
-      <Center rotation={window.innerWidth < MOBILE_WIDTH ? [-0.5, -0.75, 0] : [-0.5, -0.25, 0]}>
+      <Center rotation={isMobile ? [-0.5, -0.75, 0] : [-0.5, -0.25, 0]}>
         <Text3D
           curveSegments={32}
           bevelEnabled
