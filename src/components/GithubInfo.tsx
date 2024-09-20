@@ -25,9 +25,11 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   const updateCommitCounts = useCommitCountsStore((state) => state.updateCommits)
   const [aggregatedData, setAggregatedData] = useState<Data[]>([])
 
+  const initialUsernames = usernames[0]
+  const isFetching = fetching || !initialUsernames
+
   useEffect(() => {
-    const initialUsernames = usernames[0]
-    if (fetching || !initialUsernames) {
+    if (isFetching) {
       return
     }
 
@@ -72,7 +74,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
             </div>
           ))}
       </div>
-      {usernames[0] !== '' && (
+      {!isFetching && (
         <Heatmap aggregatedData={aggregatedData} onChangeYear={(year) => setYear(year)} year={year} years={YEARS} />
       )}
     </div>
