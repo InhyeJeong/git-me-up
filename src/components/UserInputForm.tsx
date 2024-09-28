@@ -23,6 +23,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
   const handleRemoveInput = (index: number) => {
     const updatedValues = inputValues.filter((_, i) => i !== index)
     setInputValues(updatedValues)
+    updateUserNames(updatedValues)
   }
 
   const handleInputChange = (value: string, index: number) => {
