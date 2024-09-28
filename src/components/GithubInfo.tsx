@@ -26,7 +26,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   const [aggregatedData, setAggregatedData] = useState<Data[]>([])
 
   const initialUsernames = usernames[0]
-  const isFetching = fetching || !initialUsernames
+  const isFetching = fetching || !initialUsernames || usernames.length === 0
 
   useEffect(() => {
     if (isFetching) {
@@ -60,7 +60,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
         {usernames.length === 1 &&
           data.map((user) => <div key={user.username}>{user.repos.length > 0 && <RepositoryData user={user} />}</div>)}
       </div>
-      {!isFetching && (
+      {aggregatedData.length > 0 && (
         <Heatmap aggregatedData={aggregatedData} onChangeYear={(year) => setYear(year)} year={year} years={YEARS} />
       )}
     </div>
