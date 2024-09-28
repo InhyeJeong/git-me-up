@@ -1,4 +1,3 @@
-import { getProfile } from '@/app/api/getProfile'
 import { useState, useEffect, useCallback } from 'react'
 import Title from './Title'
 
@@ -9,7 +8,7 @@ interface UserInputFormProps {
   updateFetchingStatus: (fetching: boolean) => void
 }
 
-export default function UserInputForm({ usernames, updateUserNames, fetching, updateFetchingStatus }: UserInputFormProps) {
+export default function UserInputForm({ usernames, updateUserNames, fetching }: UserInputFormProps) {
   const [inputValues, setInputValues] = useState(usernames)
 
   useEffect(() => {
@@ -37,31 +36,10 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
     }
   }
 
-  const handleFetchData = useCallback(async () => {
-    updateFetchingStatus(true)
-    try {
-      const responses = await Promise.all(
-        inputValues.map(async (username) => {
-          const profile = await getProfile(username)
-          if (!profile) {
-            throw new Error(`Error fetching data for ${username}`)
-          }
-          return profile
-        })
-      )
-      console.log('Fetched Data:', responses)
-    } catch (error) {
-      console.error('Error fetching GitHub data:', error)
-    } finally {
-      updateFetchingStatus(false)
-    }
-  }, [inputValues, updateFetchingStatus])
-
   const handleSubmit = useCallback(() => {
     const filteredUsernames = inputValues.filter((username) => username.trim() !== '')
     updateUserNames(filteredUsernames)
-    handleFetchData()
-  }, [handleFetchData, inputValues, updateUserNames])
+  }, [inputValues, updateUserNames])
 
   return (
     <div className="flex flex-col items-center w-full space-y-6 bg-transparent p-8">
