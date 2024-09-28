@@ -25,7 +25,7 @@ export const RepositoryData = ({ user }: RepositoryDataProps) => {
       <h3 className="text-2xl font-bold mb-4 text-gray-200">{user.username}&apos;s Repositories</h3>
       <Carousel itemsPerSlide={2} totalCount={sortedRepos.length}>
         {sortedRepos.map((repo) => (
-          <div key={repo.repoName} className="w-1/2 px-2">
+          <div key={repo.repoName} className="w-full md:w-1/2 px-2">
             <div className="bg-gray-800 rounded-lg shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 h-full">
               <div className="p-6">
                 <h4 className="text-xl font-semibold text-white mb-2 truncate">{repo.repoName}</h4>

@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
+import { useIsMobile } from '@/utils/isMobile'
 
 interface CarouselProps {
   children: React.ReactNode[]
@@ -9,7 +10,9 @@ interface CarouselProps {
 
 export const Carousel: React.FC<CarouselProps> = ({ children, itemsPerSlide, totalCount }) => {
   const [currentPage, setCurrentPage] = useState(0)
-  const totalPages = Math.ceil(totalCount / itemsPerSlide)
+  const isMobile = useIsMobile()
+  const effectiveItemsPerSlide = isMobile ? 1 : itemsPerSlide
+  const totalPages = Math.ceil(totalCount / effectiveItemsPerSlide)
 
   const nextPage = () => {
     setCurrentPage((prev) => Math.min(prev + 1, totalPages - 1))
@@ -22,6 +25,10 @@ export const Carousel: React.FC<CarouselProps> = ({ children, itemsPerSlide, tot
   const buttonStyle =
     'absolute top-1/2 -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700 transition-colors duration-200 z-10'
 
+  useEffect(() => {
+    setCurrentPage(0)
+  }, [isMobile])
+
   return (
     <div className="relative">
       <div className="overflow-hidden mx-10">
@@ -31,7 +38,7 @@ export const Carousel: React.FC<CarouselProps> = ({ children, itemsPerSlide, tot
         >
           {Array.from({ length: totalPages }, (_, pageIndex) => (
             <div key={pageIndex} className="flex w-full flex-shrink-0">
-              {children.slice(pageIndex * itemsPerSlide, (pageIndex + 1) * itemsPerSlide)}
+              {children.slice(pageIndex * effectiveItemsPerSlide, (pageIndex + 1) * effectiveItemsPerSlide)}
             </div>
           ))}
         </div>
