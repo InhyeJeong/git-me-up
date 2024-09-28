@@ -1,8 +1,9 @@
 import React, { useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { PerspectiveCamera, Text, Cloud } from '@react-three/drei'
+import { PerspectiveCamera, Cloud, Center, Text3D } from '@react-three/drei'
 import * as THREE from 'three'
 import { RoundedBox } from '@react-three/drei'
+import { Color } from 'three'
 
 interface FloatingCubesProps {
   commits: { date: string; count: number }[]
@@ -34,9 +35,27 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
         <meshPhysicalMaterial color={color} roughness={0.1} transmission={0.9} thickness={0.5} reflectivity={0.6} />
       </RoundedBox>
       <Cloud position={[0, 1.3, 0]} opacity={0.2} speed={0.2} segments={12} bounds={[0.2, 0.1, 0.2]} scale={[0.25, 0.25, 0.25]} />
-      <Text position={[0, 1.6, 0]} fontSize={0.15} color="white" anchorX="center" anchorY="middle">
-        {`${date}\nCommits: ${count}`}
-      </Text>
+      <Center position={[0, 1.6, 0]}>
+        <Text3D
+          font="/Inter_Bold.json"
+          size={0.08}
+          height={0.01}
+          curveSegments={16}
+          bevelEnabled
+          bevelThickness={0.005}
+          bevelSize={0.005}
+          bevelOffset={0}
+          bevelSegments={5}
+        >
+          {`${date}\nCommits: ${count}`}
+          <meshPhongMaterial
+            color={new Color("#FFD700")}
+            emissive={new Color("#FFA500")}
+            specular={new Color("#FFFFFF")}
+            shininess={100}
+          />
+        </Text3D>
+      </Center>
     </group>
   )
 }
