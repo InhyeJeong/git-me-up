@@ -1,7 +1,6 @@
-import React from 'react'
-import { Canvas } from '@react-three/fiber'
-import { PerspectiveCamera, Text } from '@react-three/drei'
-import { useFrame } from '@react-three/fiber'
+import React, { useRef } from 'react'
+import { Canvas, useFrame } from '@react-three/fiber'
+import { PerspectiveCamera, Text, Cloud } from '@react-three/drei'
 import * as THREE from 'three'
 import { RoundedBox } from '@react-three/drei'
 
@@ -19,34 +18,26 @@ interface FloatingCubeProps {
 }
 
 const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
-  const meshRef = React.useRef<THREE.Mesh>(null!)
+  const groupRef = useRef<THREE.Group>(null!)
 
   useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.position.y += Math.sin(meshRef.current.position.x / 5) * 0.01
-      meshRef.current.position.x += 0.02
-      if (meshRef.current.position.x > 10) meshRef.current.position.x = -10
+    if (groupRef.current) {
+      groupRef.current.position.y += Math.sin(groupRef.current.position.x / 5) * 0.01
+      groupRef.current.position.x += 0.02
+      if (groupRef.current.position.x > 10) groupRef.current.position.x = -10
     }
   })
 
   return (
-    <mesh ref={meshRef} position={position} castShadow>
+    <group ref={groupRef} position={position}>
       <RoundedBox args={[1, 1, 1]} radius={0.1} smoothness={4}>
         <meshPhysicalMaterial color={color} roughness={0.1} transmission={0.9} thickness={0.5} reflectivity={0.6} />
       </RoundedBox>
-
-      <Text
-        position={[0, 0, 0.7]}
-        fontSize={0.15}
-        color="white"
-        outlineWidth={0.01}
-        outlineColor="black"
-        anchorX="center"
-        anchorY="middle"
-      >
-        {`${date}\n  Count: ${count}`}
+      <Cloud position={[0, 1.3, 0]} opacity={0.2} speed={0.2} segments={12} bounds={[0.2, 0.1, 0.2]} scale={[0.25, 0.25, 0.25]} />
+      <Text position={[0, 1.6, 0]} fontSize={0.15} color="white" anchorX="center" anchorY="middle">
+        {`${date}\nCommits: ${count}`}
       </Text>
-    </mesh>
+    </group>
   )
 }
 
