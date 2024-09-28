@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@heroicons/react": "^2.1.5",
+    "@primer/octicons-react": "^19.11.0",
     "@react-three/drei": "^9.112.0",
     "@react-three/fiber": "^8.17.7",
     "@react-three/postprocessing": "^2.16.2",
