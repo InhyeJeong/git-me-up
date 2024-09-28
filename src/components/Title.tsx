@@ -1,28 +1,33 @@
+import { useIsMobile } from '@/utils/isMobile'
 import { Center, OrbitControls, Text3D } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect, useState } from 'react'
 
-const MOBILE_WIDTH = 768
-const DEFAULT_FONT_SIZE = 10
-const MOBILE_FONT_SIZE = 6
+const TITLE_CONFIG = {
+  mobile: {
+    fontSize: 6,
+    text: 'Git\nme up',
+  },
+  desktop: {
+    fontSize: 10,
+    text: 'Git me up',
+  },
+}
 
 export default function Title() {
-  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE)
-  const [isMobile, setIsMobile] = useState(false)
+  const [fontSize, setFontSize] = useState(TITLE_CONFIG.desktop.fontSize)
+  const [text, setText] = useState(TITLE_CONFIG.desktop.text)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < MOBILE_WIDTH)
-      setFontSize(window.innerWidth < MOBILE_WIDTH ? MOBILE_FONT_SIZE : DEFAULT_FONT_SIZE)
+    if (isMobile) {
+      setFontSize(TITLE_CONFIG.mobile.fontSize)
+      setText(TITLE_CONFIG.mobile.text)
+    } else {
+      setFontSize(TITLE_CONFIG.desktop.fontSize)
+      setText(TITLE_CONFIG.desktop.text)
     }
-
-    window.addEventListener('resize', handleResize)
-    handleResize()
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
+  }, [isMobile])
 
   return (
     <Canvas orthographic camera={{ position: [0, 0, 100], zoom: 10 }} className="cursor-pointer">
@@ -40,7 +45,7 @@ export default function Title() {
           size={fontSize}
           font="/Inter_Bold.json"
         >
-          Git me up
+          {text}
           <meshNormalMaterial />
         </Text3D>
       </Center>
