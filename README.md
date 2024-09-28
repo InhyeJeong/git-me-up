@@ -27,8 +27,8 @@ To get started with the project, follow these steps:
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/yourusername/3d-profile-generator.git
-   cd 3d-profile-generator
+   git clone https://github.com/InhyeJeong/git-me-up.git
+   cd git-me-up
 
 2. **Install dependencies**:
    ```bash
