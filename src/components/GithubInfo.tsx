@@ -47,7 +47,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
     }
 
     fetchData()
-  }, [fetching, updateCommitCounts, usernames, year])
+  }, [fetching, isFetching, updateCommitCounts, usernames, year])
 
   return (
     <div className="text-white w-full mx-8">
@@ -61,18 +61,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
       ))}
       <div>
         {usernames.length === 1 &&
-          data.map((user) => (
-            <div key={user.username}>
-              {user.repos.length > 0 && (
-                <>
-                  <h3 className="text-lg font-medium">{user.username}&apos;s Repositories</h3>
-                  <ul className="mt-4">
-                    <RepositoryData user={user} />
-                  </ul>
-                </>
-              )}
-            </div>
-          ))}
+          data.map((user) => <div key={user.username}>{user.repos.length > 0 && <RepositoryData user={user} />}</div>)}
       </div>
       {!isFetching && (
         <Heatmap aggregatedData={aggregatedData} onChangeYear={(year) => setYear(year)} year={year} years={YEARS} />
