@@ -1,5 +1,7 @@
 # GitHub Commit Heatmap Visualizer
 
+[demo](git-me-up-rho.vercel.app)
+
 A tool to visualize GitHub commit activity using 3D cubes. Users can input multiple GitHub accounts to see their commit activity represented as 3D cubes.
 
 ## Features
