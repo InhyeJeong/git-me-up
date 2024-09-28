@@ -4,6 +4,8 @@ import { PerspectiveCamera, Cloud, Center, Text3D } from '@react-three/drei'
 import * as THREE from 'three'
 import { RoundedBox } from '@react-three/drei'
 import { Color } from 'three'
+import { useTexture } from '@react-three/drei'
+import { EffectComposer, Bloom } from '@react-three/postprocessing'
 
 interface FloatingCubesProps {
   commits: { date: string; count: number }[]
@@ -20,6 +22,7 @@ interface FloatingCubeProps {
 
 const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
   const groupRef = useRef<THREE.Group>(null!)
+  const texture = useTexture('/Metal032_1K-JPG_Color.jpg')
 
   useFrame(() => {
     if (groupRef.current) {
@@ -32,7 +35,19 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
   return (
     <group ref={groupRef} position={position}>
       <RoundedBox args={[1, 1, 1]} radius={0.1} smoothness={4}>
-        <meshPhysicalMaterial color={color} roughness={0.1} transmission={0.9} thickness={0.5} reflectivity={0.6} />
+        <meshPhysicalMaterial
+          color={new THREE.Color(color).multiplyScalar(0.8)}
+          roughness={0.4}
+          metalness={0.6}
+          clearcoat={0.8}
+          clearcoatRoughness={0.1}
+          map={texture}
+          normalMap={texture}
+          normalScale={new THREE.Vector2(0.5, 0.5)}
+          envMapIntensity={1.5}
+          emissive={new THREE.Color(color).multiplyScalar(0.4)}
+          emissiveIntensity={0.8}
+        />
       </RoundedBox>
       <Cloud position={[0, 1.3, 0]} opacity={0.2} speed={0.2} segments={12} bounds={[0.2, 0.1, 0.2]} scale={[0.25, 0.25, 0.25]} />
       <Center position={[0, 1.6, 0]}>
@@ -49,9 +64,9 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
         >
           {`${date}\nCommits: ${count}`}
           <meshPhongMaterial
-            color={new Color("#FFD700")}
-            emissive={new Color("#FFA500")}
-            specular={new Color("#FFFFFF")}
+            color={new Color('#FFD700')}
+            emissive={new Color('#FFA500')}
+            specular={new Color('#FFFFFF')}
             shininess={100}
           />
         </Text3D>
@@ -63,20 +78,23 @@ const FloatingCube = ({ position, color, date, count }: FloatingCubeProps) => {
 const FloatingCubes: React.FC<FloatingCubesProps> = ({ commits }) => {
   return (
     <div id="scene">
-      <Canvas shadows style={{ width: '100%', height: '100%' }}>
+      <Canvas shadows style={{ background: 'black' }}>
         <PerspectiveCamera makeDefault position={[0, 0, 10]} />
-        <ambientLight intensity={0.5} />
-        <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} castShadow />
-        <pointLight position={[-10, -10, -10]} intensity={1} castShadow />
-        {commits.map((commit, i) => (
+        <ambientLight intensity={0.8} />
+        <directionalLight position={[5, 5, 5]} intensity={1} />
+        <pointLight position={[-5, -5, -5]} intensity={0.8} />
+        {commits.map((commit, index) => (
           <FloatingCube
-            key={i}
+            key={index}
             position={[Math.random() * 20 - 10, Math.random() * 20 - 10, Math.random() * 20 - 10]}
             color={colorScale[Math.min(commit.count, colorScale.length - 1)]}
             date={commit.date}
             count={commit.count}
           />
         ))}
+        <EffectComposer>
+          <Bloom luminanceThreshold={0.5} luminanceSmoothing={0.9} height={300} />
+        </EffectComposer>
       </Canvas>
     </div>
   )

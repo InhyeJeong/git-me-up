@@ -52,10 +52,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
   return (
     <div className="text-white w-full mx-8">
       {data.map((user) => (
-        <div
-          key={user.username}
-          className="bg-black bg-opacity-20 rounded-lg p-6 mb-8 shadow-lg transition-transform hover:-translate-y-1"
-        >
+        <div key={user.username} className="bg-transparent rounded-lg p-6 mb-8">
           <UserProfile profile={user.profile} />
         </div>
       ))}
