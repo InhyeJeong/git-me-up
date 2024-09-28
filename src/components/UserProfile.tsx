@@ -1,6 +1,7 @@
 import { UserProfile as UserProfieType } from '@/types'
 import React from 'react'
 import Image from 'next/image'
+import { BuildingOfficeIcon, MapPinIcon, EnvelopeIcon, LinkIcon } from '@heroicons/react/24/outline'
 
 interface UserProfileProps {
   profile: UserProfieType
@@ -28,22 +29,22 @@ export const UserProfile = ({ profile }: UserProfileProps) => {
       </div>
       <div className="px-6 py-4">
         <div className="flex items-center mb-4">
-          <i className="fas fa-building mr-2 text-gray-300"></i>
+          <BuildingOfficeIcon className="h-5 w-5 mr-2 text-gray-300" />
           <p className="text-gray-300">{profile?.company || 'No company listed'}</p>
         </div>
         <div className="flex items-center mb-4">
-          <i className="fas fa-map-marker-alt mr-2 text-gray-300"></i>
+          <MapPinIcon className="h-5 w-5 mr-2 text-gray-300" />
           <p className="text-gray-300">{profile?.location || 'No location available'}</p>
         </div>
         <div className="flex items-center mb-4">
-          <i className="fas fa-envelope mr-2 text-gray-300"></i>
+          <EnvelopeIcon className="h-5 w-5 mr-2 text-gray-300" />
           <p className="text-gray-300">{profile?.email || 'No email available'}</p>
         </div>
         <p className="text-gray-300 mt-2">{profile?.bio || 'No bio available'}</p>
       </div>
       <div className="px-6 py-4">
         <div className="flex items-center">
-          <i className="fas fa-link mr-2 text-gray-300"></i>
+          <LinkIcon className="h-5 w-5 mr-2 text-gray-300" />
           <a href={profile.blog} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
             {profile.blog}
           </a>
