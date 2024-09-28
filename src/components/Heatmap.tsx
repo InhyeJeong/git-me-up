@@ -5,10 +5,10 @@ import ReactTooltip from 'react-tooltip'
 
 const getColor = (count: number) => {
   if (count === 0) return 'color-empty'
-  if (count < 5) return 'color-scale-1'
-  if (count < 10) return 'color-scale-2'
-  if (count < 15) return 'color-scale-3'
-  return 'color-scale-4'
+  if (count < 5) return 'color-github-1'
+  if (count < 10) return 'color-github-2'
+  if (count < 15) return 'color-github-3'
+  return 'color-github-4'
 }
 
 interface Data {
@@ -87,7 +87,7 @@ const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChange
       <div className="flex justify-end mt-4">
         <div className="flex items-center">
           <span className="text-white mr-2">Less</span>
-          {['color-empty', 'color-scale-1', 'color-scale-2', 'color-scale-3', 'color-scale-4'].map((color) => (
+          {['color-empty', 'color-github-1', 'color-github-2', 'color-github-3', 'color-github-4'].map((color) => (
             <div key={color} className={`w-4 h-4 ${color} mr-1`} />
           ))}
           <span className="text-white ml-2">More</span>
