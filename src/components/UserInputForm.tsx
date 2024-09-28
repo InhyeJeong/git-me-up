@@ -1,5 +1,5 @@
 import { getProfile } from '@/app/api/getProfile'
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import Title from './Title'
 
 interface UserInputFormProps {
@@ -12,6 +12,10 @@ interface UserInputFormProps {
 export default function UserInputForm({ usernames, updateUserNames, fetching, updateFetchingStatus }: UserInputFormProps) {
   const [inputValues, setInputValues] = useState(usernames)
 
+  useEffect(() => {
+    setInputValues(usernames)
+  }, [usernames])
+
   const handleAddInput = () => {
     setInputValues([...inputValues, ''])
   }
@@ -19,7 +23,6 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
   const handleRemoveInput = (index: number) => {
     const updatedValues = inputValues.filter((_, i) => i !== index)
     setInputValues(updatedValues)
-    updateUserNames(updatedValues)
   }
 
   const handleInputChange = (value: string, index: number) => {
@@ -33,12 +36,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
     }
   }
 
-  const handleSubmit = () => {
-    updateUserNames(inputValues)
-    handleFetchData()
-  }
-
-  const handleFetchData = async () => {
+  const handleFetchData = useCallback(async () => {
     updateFetchingStatus(true)
     try {
       const responses = await Promise.all(
@@ -56,7 +54,13 @@ export default function UserInputForm({ usernames, updateUserNames, fetching, up
     } finally {
       updateFetchingStatus(false)
     }
-  }
+  }, [inputValues, updateFetchingStatus])
+
+  const handleSubmit = useCallback(() => {
+    const filteredUsernames = inputValues.filter((username) => username.trim() !== '')
+    updateUserNames(filteredUsernames)
+    handleFetchData()
+  }, [handleFetchData, inputValues, updateUserNames])
 
   return (
     <div className="flex flex-col items-center w-full space-y-6 bg-transparent p-8">
