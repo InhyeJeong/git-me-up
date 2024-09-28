@@ -1,0 +1,105 @@
+name: Auto Tag on Push
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  create_tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Get latest tag
+        id: get_latest_tag
+        run: |
+          echo "태그 가져오는 중..."
+          git fetch --tags
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo v0.0.0)
+          echo "LATEST_TAG=$latest_tag" >> $GITHUB_OUTPUT
+          echo "최신 태그: $latest_tag"
+
+      - name: Determine version bump
+        id: bump_type
+        run: |
+          commit_message=$(git log -1 --pretty=%B)
+          if [[ $commit_message == *"[major]"* ]]; then
+            echo "BUMP=major" >> $GITHUB_OUTPUT
+          elif [[ $commit_message == *"[minor]"* ]]; then
+            echo "BUMP=minor" >> $GITHUB_OUTPUT
+          elif [[ $commit_message == *"[patch]"* ]]; then
+            echo "BUMP=patch" >> $GITHUB_OUTPUT
+          else
+            echo "BUMP=patch" >> $GITHUB_OUTPUT
+          fi
+          echo "버전 업데이트 유형: ${{ steps.bump_type.outputs.BUMP }}"
+
+      - name: Bump version and push tag
+        id: bump_version
+        run: |
+          latest_tag=${{ steps.get_latest_tag.outputs.LATEST_TAG }}
+          echo "현재 최신 태그: $latest_tag"
+
+          major=$(echo $latest_tag | cut -d. -f1 | sed 's/v//')
+          minor=$(echo $latest_tag | cut -d. -f2)
+          patch=$(echo $latest_tag | cut -d. -f3)
+          echo "현재 버전: $major.$minor.$patch"
+
+          case "${{ steps.bump_type.outputs.BUMP }}" in
+            major)
+              new_tag="v$((major + 1)).0.0"
+              ;;
+            minor)
+              new_tag="v$major.$((minor + 1)).0"
+              ;;
+            patch)
+              new_tag="v$major.$minor.$((patch + 1))"
+              ;;
+          esac
+          echo "NEW_TAG=$new_tag" >> $GITHUB_OUTPUT
+          echo "생성될 새 태그: $new_tag"
+
+          echo "Git 설정 중..."
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          echo "새 태그 생성 중..."
+          git tag -a $new_tag -m "자동 생성된 태그 $new_tag"
+
+          echo "새 태그 푸시 중..."
+          if git push origin $new_tag; then
+            echo "새 태그 $new_tag 가 생성되고 푸시되었습니다."
+          else
+            echo "새 태그 $new_tag 푸시 실패"
+            exit 1
+          fi
+
+      - name: Generate Release Notes
+        id: release_notes
+        run: |
+          echo "릴리스 노트 생성 중..."
+          latest_tag=${{ steps.get_latest_tag.outputs.LATEST_TAG }}
+          new_tag=${{ steps.bump_version.outputs.NEW_TAG }}
+
+          echo "RELEASE_NOTES<<EOF" >> $GITHUB_OUTPUT
+          echo "## 변경 사항" >> $GITHUB_OUTPUT
+          echo "$(git log ${latest_tag}..HEAD --pretty=format:'* %s (%h)' --reverse)" >> $GITHUB_OUTPUT
+          echo "" >> $GITHUB_OUTPUT
+          echo "## 전체 변경사항" >> $GITHUB_OUTPUT
+          echo "[${latest_tag}...${new_tag}](https://github.com/${{ github.repository }}/compare/${latest_tag}...${new_tag})" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.bump_version.outputs.NEW_TAG }}
+          release_name: Release ${{ steps.bump_version.outputs.NEW_TAG }}
+          body: |
+            ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          draft: false
+          prerelease: false
