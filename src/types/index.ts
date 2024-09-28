@@ -53,3 +53,27 @@ export interface GitHubUserData {
   profile: UserProfile
   repos: RepoWithCommits[]
 }
+
+export interface LanguageData {
+  [language: string]: number
+}
+
+export interface CommitPatternData {
+  [day: string]: number[]
+}
+
+export interface ActivityData {
+  date: string
+  count: number
+}
+
+export interface ChartData {
+  labels: string[]
+  datasets: {
+    label?: string
+    data: number[]
+    backgroundColor?: string | string[]
+    borderColor?: string
+    fill?: boolean
+  }[]
+}
