@@ -19,8 +19,8 @@ interface Data {
 
 interface HeatmapProps {
   aggregatedData: Data[]
-  onChangeYear: (year: number) => void
   year: number
+  onChangeYear: (year: number) => void
 }
 
 const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, onChangeYear }) => {
@@ -43,7 +43,7 @@ const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, onChangeYear })
   }
 
   return (
-    <div className="mt-8 bg-transparent rounded-lg p-6 shadow-lg relative z-10">
+    <div className="mt-8 bg-zinc-600 bg-opacity-20 rounded-lg p-6 shadow-lg relative z-10">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold text-white">Public Commit Activity</h2>
         <select
