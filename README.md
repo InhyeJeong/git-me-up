@@ -7,7 +7,7 @@
 
 A dynamic GitHub commit activity visualizer using 3D cubes. Input multiple GitHub usernames and watch their commit history come to life!
 
-[View Demo](https://git-me-up-demo.vercel.app)
+[View Demo](https://git-me-up-rho.vercel.app)
 
 ## ✨ Features
 
