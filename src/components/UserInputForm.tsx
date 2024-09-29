@@ -30,8 +30,11 @@ export default function UserInputForm({ usernames, updateUserNames, fetching }: 
     setInputValues(updatedValues)
   }
 
-  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp = (event: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (event.key === 'Enter') {
+      if (inputValues[index].trim() === '') {
+        return
+      }
       handleSubmit()
     }
   }
@@ -51,7 +54,7 @@ export default function UserInputForm({ usernames, updateUserNames, fetching }: 
               type="text"
               value={username}
               onChange={(e) => handleInputChange(e.target.value, index)}
-              onKeyUp={handleKeyUp}
+              onKeyUp={(event) => handleKeyUp(event, index)}
               placeholder="Enter GitHub username"
               className="flex-grow p-4 bg-gray-900 border-2 border-transparent focus:border-indigo-500 rounded-lg shadow-lg focus:ring-2 focus:ring-indigo-600 transition duration-300 text-white placeholder-gray-500"
             />
