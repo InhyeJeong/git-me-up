@@ -81,6 +81,7 @@ jobs:
             fi
           else
             echo "No version bump required."
+            exit 0
           fi
 
       - name: Generate Release Notes
