@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios'
-import { API_URL } from './api'
+import axios from 'axios'
+import axiosInstance from './api'
 
 interface UserActivity {
   date: string
@@ -13,7 +13,7 @@ interface GitHubEvent {
 
 export async function getUserActivity(username: string): Promise<UserActivity[]> {
   try {
-    const response: AxiosResponse<GitHubEvent[]> = await axios.get(`${API_URL}/users/${username}/events`)
+    const response = await axiosInstance.get<GitHubEvent[]>(`/users/${username}/events`)
     const events = response.data
 
     // 최근 30일간의 활동을 집계
@@ -21,7 +21,7 @@ export async function getUserActivity(username: string): Promise<UserActivity[]>
     const today = new Date()
     const thirtyDaysAgo = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000)
 
-    events.forEach((event: GitHubEvent) => {
+    events.forEach((event) => {
       const eventDate = new Date(event.created_at)
       if (eventDate >= thirtyDaysAgo) {
         const dateString = eventDate.toISOString().split('T')[0]

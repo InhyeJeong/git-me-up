@@ -1,10 +1,9 @@
-import axios from 'axios'
 import { LanguageData, CommitPatternData } from '@/types'
-import { API_URL } from '@/app/api/api'
+import axiosInstance from './api'
 
 export async function getProjectLanguages(username: string, repo: string): Promise<LanguageData> {
   try {
-    const response = await axios.get(`${API_URL}/repos/${username}/${repo}/languages`)
+    const response = await axiosInstance.get(`/repos/${username}/${repo}/languages`)
     return response.data
   } catch (error) {
     console.error('언어 데이터를 가져오는 중 오류 발생:', error)
@@ -14,7 +13,7 @@ export async function getProjectLanguages(username: string, repo: string): Promi
 
 export async function getCommitPatterns(username: string, repo: string): Promise<CommitPatternData> {
   try {
-    const response = await axios.get(`${API_URL}/repos/${username}/${repo}/stats/punch_card`)
+    const response = await axiosInstance.get(`/repos/${username}/${repo}/stats/punch_card`)
     const punchCard = response.data
 
     const commitPatterns: CommitPatternData = {

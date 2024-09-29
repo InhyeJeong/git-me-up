@@ -1,15 +1,8 @@
 import { Repo } from '@/types'
-import axios from 'axios'
-import { API_URL } from './api'
-
-const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN
+import axiosInstance from './api'
 
 export async function getRepos(username: string): Promise<Repo[]> {
-  const response = await axios.get(`${API_URL}/users/${username}/repos`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  const response = await axiosInstance.get(`/users/${username}/repos`)
 
   return response.data
 }
