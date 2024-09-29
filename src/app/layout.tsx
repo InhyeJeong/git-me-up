@@ -15,8 +15,18 @@ const geistMono = localFont({
 })
 
 export const metadata: Metadata = {
-  title: 'Git me up',
-  description: 'A GitHub data visualization app',
+  title: 'Git me up - GitHub Data Visualization',
+  description: 'A GitHub data visualization app that tracks user activity and commit history.',
+  keywords: 'GitHub, data visualization, commit history, user activity, open source',
+  authors: [{ name: 'Inhye Jeong', url: 'https://github.com/InhyeJeong' }],
+  openGraph: {
+    title: 'Git me up - GitHub Data Visualization',
+    description: 'A GitHub data visualization app that tracks user activity and commit history.',
+    url: 'https://git-me-up-rho.vercel.app',
+    siteName: 'Git me up',
+    locale: 'en_US',
+    type: 'website',
+  },
 }
 
 export default function RootLayout({
