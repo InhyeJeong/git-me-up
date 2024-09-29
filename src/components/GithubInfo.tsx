@@ -73,7 +73,7 @@ export default function GithubInfo({ usernames, fetching }: GihubInfoProps) {
         {usernames.length === 1 &&
           data.map((user) => <div key={user.username}>{user.repos.length > 0 && <RepositoryData user={user} />}</div>)}
       </div>
-      <Heatmap aggregatedData={aggregatedData} onChangeYear={(year) => setYear(year)} year={year} />
+      {data.length > 0 && <Heatmap aggregatedData={aggregatedData} onChangeYear={(year) => setYear(year)} year={year} />}
     </div>
   )
 }
