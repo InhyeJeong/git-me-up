@@ -81,6 +81,7 @@ jobs:
             fi
           else
             echo "No version bump required."
+            echo "Skipping tag creation."
             exit 0
           fi
 
@@ -100,6 +101,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create Release
+        if: steps.bump_type.outputs.BUMP != 'none'
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
