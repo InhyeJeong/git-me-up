@@ -41,6 +41,7 @@ export interface UserProfile {
   public_repos: number
   followers: number
   following: number
+  created_at: string
 }
 
 export interface RepoWithCommits extends RepoBase {

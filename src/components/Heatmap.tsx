@@ -2,6 +2,7 @@ import React from 'react'
 import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
 import ReactTooltip from 'react-tooltip'
+import { useYearStore } from '@/app/store/yearStore'
 
 const getColor = (count: number) => {
   if (count === 0) return 'color-empty'
@@ -20,22 +21,11 @@ interface HeatmapProps {
   aggregatedData: Data[]
   onChangeYear: (year: number) => void
   year: number
-  years: number[]
 }
 
-interface Data {
-  date: string
-  count: number
-}
+const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, onChangeYear }) => {
+  const years = useYearStore((state) => state.years)
 
-interface HeatmapProps {
-  aggregatedData: Data[]
-  onChangeYear: (year: number) => void
-  year: number
-  years: number[]
-}
-
-const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChangeYear }) => {
   const handleYearChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     onChangeYear(Number(event.target.value))
   }
@@ -55,7 +45,7 @@ const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, years, onChange
   return (
     <div className="mt-8 bg-transparent rounded-lg p-6 shadow-lg relative z-10">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-white">Commit Activity</h2>
+        <h2 className="text-2xl font-bold text-white">Public Commit Activity</h2>
         <select
           id="year"
           value={year}
