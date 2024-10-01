@@ -1,11 +1,13 @@
 'use client'
-import { Container } from '@/components/Container'
-import GithubInfo from '@/components/GithubInfo'
-import UserInputForm from '@/components/UserInputForm'
 import { useState, useEffect, Suspense } from 'react'
-import { useCommitCountsStore } from './store/githubInfoStore'
-import FloatingCubes from '@/components/FloatingCubes'
 import { useSearchParams, useRouter } from 'next/navigation'
+
+import { Container } from '@/components/layout/Container'
+import GithubInfo from '@/components/user-data/GithubInfo'
+import UserInputForm from '@/components/user-data/UserInputForm'
+import FloatingCubes from '@/components/user-data/FloatingCubes'
+
+import { useCommitCountsStore } from './store/githubInfoStore'
 
 function HomeContent() {
   const [usernames, setUsernames] = useState<string[]>([''])

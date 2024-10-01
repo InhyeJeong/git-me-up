@@ -1,8 +1,7 @@
 'use client'
-
 import React, { useState } from 'react'
-import ProjectAnalysis from '@/components/ProjectAnalysis'
-import SocialComparison from '@/components/SocialComparison'
+import ProjectAnalysis from '@/components/analysis/ProjectAnalysis'
+import SocialComparison from '@/components/analysis/SocialComparison'
 
 export default function GitHubAnalysis() {
   const [currentPage, setCurrentPage] = useState<'project' | 'social'>('project')

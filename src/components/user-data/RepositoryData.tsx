@@ -2,7 +2,7 @@ import { GitHubUserData } from '@/types'
 
 import { StarIcon } from '@heroicons/react/24/outline'
 import { RepoForkedIcon } from '@primer/octicons-react'
-import { Carousel } from './Carousel'
+import { Carousel } from '../common/Carousel'
 
 const emoji_map = {
   JavaScript: '🟡',
