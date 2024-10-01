@@ -27,15 +27,16 @@ const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, onChangeYear })
     onChangeYear(Number(event.target.value))
   }
 
-  const tooltipDataAttrs = (value: { date: string; count: number } | null) => {
-    if (!value || value?.count === 0) {
+  const tooltipDataAttrs = (value: { date: string | null; count: number | null }) => {
+    if (value?.count === null || value?.date === null) {
       return null
     }
 
     const date = new Date(value.date)
     const formattedDate = date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+
     return {
-      'data-tip': `${value.count || 0} contribution${value.count !== 1 ? 's' : ''} on ${formattedDate}.`,
+      'data-tip': `${value.count} contribution${value.count !== 1 ? 's' : ''} on ${formattedDate}.`,
     }
   }
 
@@ -59,12 +60,12 @@ const Heatmap: React.FC<HeatmapProps> = ({ aggregatedData, year, onChangeYear })
       <CalendarHeatmap
         startDate={new Date(`${year}-01-01`)}
         endDate={new Date(`${year}-12-31`)}
-        values={aggregatedData.map((d) => ({ date: d.date, count: d.count }))}
+        values={aggregatedData.map(({ date, count }) => ({ date, count }))}
         classForValue={(value) => {
-          if (!value || value?.count === null) {
+          if (!value) {
             return 'color-empty'
           }
-          return getColor(value.count)
+          return getColor(value.count as number)
         }}
         showWeekdayLabels={true}
         tooltipDataAttrs={tooltipDataAttrs}
