@@ -22,6 +22,10 @@ export const Carousel: React.FC<CarouselProps> = ({ children, itemsPerSlide, tot
     setCurrentPage((prev) => Math.max(prev - 1, 0))
   }
 
+  const goToPage = (index: number) => {
+    setCurrentPage(index)
+  }
+
   const buttonStyle =
     'absolute top-1/2 -translate-y-1/2 bg-gray-800 text-white p-2 rounded-full shadow-lg hover:bg-gray-700 transition-colors duration-200 z-10'
 
@@ -53,6 +57,19 @@ export const Carousel: React.FC<CarouselProps> = ({ children, itemsPerSlide, tot
           <ChevronRightIcon className="h-6 w-6" />
         </button>
       )}
+      <div className="flex justify-center mt-4">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index}
+            onClick={() => goToPage(index)}
+            className={`w-2.5 h-2.5 mx-1 rounded-full transition duration-300 ease-in-out 
+              ${
+                currentPage === index ? 'bg-blue-500 opacity-100 transform scale-125' : 'bg-gray-300 opacity-50 hover:opacity-75'
+              }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   )
 }
