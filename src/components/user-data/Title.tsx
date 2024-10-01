@@ -1,13 +1,16 @@
-import { TITLE_CONFIG } from '@/app/constants'
-import { useIsMobile } from '@/utils/isMobile'
+import { useEffect, useState } from 'react'
 import { Center, OrbitControls, Text3D } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { useEffect, useState } from 'react'
+import { Euler } from 'three'
+import { TITLE_CONFIG } from '@/app/constants'
+import { useIsMobile } from '@/utils/isMobile'
 
 export default function Title() {
+  const isMobile = useIsMobile()
+
   const [fontSize, setFontSize] = useState(TITLE_CONFIG.desktop.fontSize)
   const [text, setText] = useState(TITLE_CONFIG.desktop.text)
-  const isMobile = useIsMobile()
+  const [rotation, setRotation] = useState<Euler>(isMobile ? new Euler(-0.5, -0.75, 0) : new Euler(-0.5, -0.25, 0))
 
   useEffect(() => {
     if (isMobile) {
@@ -19,11 +22,20 @@ export default function Title() {
     }
   }, [isMobile])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // NOTE: y축 회전
+      setRotation((prev) => new Euler(prev.x, prev.y + 0.01, prev.z))
+    }, 16) // 약 60fps
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
     <Canvas orthographic camera={{ position: [0, 0, 100], zoom: 10 }} className="cursor-pointer">
       <ambientLight intensity={0.5} />
       <directionalLight position={[10, 10, 10]} />
-      <Center rotation={isMobile ? [-0.5, -0.75, 0] : [-0.5, -0.25, 0]}>
+      <Center rotation={rotation}>
         <Text3D
           curveSegments={32}
           bevelEnabled
