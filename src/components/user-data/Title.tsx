@@ -5,20 +5,22 @@ import { Euler } from 'three'
 import { TITLE_CONFIG } from '@/app/constants'
 import { useIsMobile } from '@/utils/isMobile'
 
+const { mobile, desktop } = TITLE_CONFIG
+
 export default function Title() {
   const isMobile = useIsMobile()
 
-  const [fontSize, setFontSize] = useState(TITLE_CONFIG.desktop.fontSize)
-  const [text, setText] = useState(TITLE_CONFIG.desktop.text)
+  const [fontSize, setFontSize] = useState(desktop.fontSize)
+  const [text, setText] = useState(desktop.text)
   const [rotation, setRotation] = useState<Euler>(isMobile ? new Euler(-0.5, -0.75, 0) : new Euler(-0.5, -0.25, 0))
 
   useEffect(() => {
     if (isMobile) {
-      setFontSize(TITLE_CONFIG.mobile.fontSize)
-      setText(TITLE_CONFIG.mobile.text)
+      setFontSize(mobile.fontSize)
+      setText(mobile.text)
     } else {
-      setFontSize(TITLE_CONFIG.desktop.fontSize)
-      setText(TITLE_CONFIG.desktop.text)
+      setFontSize(desktop.fontSize)
+      setText(desktop.text)
     }
   }, [isMobile])
 
