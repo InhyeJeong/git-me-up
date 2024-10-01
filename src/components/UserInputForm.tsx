@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import Title from './Title'
+import classNames from 'classnames'
 
 interface UserInputFormProps {
   usernames: string[]
@@ -56,7 +57,13 @@ export default function UserInputForm({ usernames, updateUserNames, fetching }: 
               onChange={(e) => handleInputChange(e.target.value, index)}
               onKeyUp={(event) => handleKeyUp(event, index)}
               placeholder="Enter GitHub username"
-              className="flex-grow p-4 bg-gray-900 border-2 border-transparent focus:border-indigo-500 rounded-lg shadow-lg focus:ring-2 focus:ring-indigo-600 transition duration-300 text-white placeholder-gray-500"
+              className={classNames(
+                'flex-grow p-4 bg-gray-900 border-2 border-transparent rounded-lg shadow-lg transition duration-300 text-white placeholder-gray-500',
+                {
+                  'border-indigo-500 focus:ring-2 focus:ring-indigo-600': !fetching,
+                  'opacity-50 cursor-not-allowed': fetching,
+                }
+              )}
             />
             {inputValues.length > 1 && (
               <button
@@ -79,10 +86,15 @@ export default function UserInputForm({ usernames, updateUserNames, fetching }: 
           + Add Username
         </button>
         <button
-          className={`px-8 py-4 bg-gray-300 text-gray-800 rounded-lg shadow-md hover:bg-gray-400 hover:text-white transition-all duration-300 ease-in-out transform hover:scale-105 ${
-            inputValues.some((username) => !username) ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled={inputValues.some((username) => !username) || fetching}
+          className={classNames(
+            'px-8 py-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105',
+            {
+              'bg-gray-300 text-gray-800 hover:bg-gray-400 hover:text-white':
+                !fetching && inputValues.every((username) => username),
+              'opacity-50 cursor-not-allowed': fetching || inputValues.some((username) => !username),
+            }
+          )}
+          disabled={fetching || inputValues.some((username) => !username)}
           onClick={handleSubmit}
         >
           {fetching ? 'Fetching...' : 'Submit'}
