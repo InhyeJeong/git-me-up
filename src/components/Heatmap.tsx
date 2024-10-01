@@ -3,22 +3,19 @@ import CalendarHeatmap from 'react-calendar-heatmap'
 import 'react-calendar-heatmap/dist/styles.css'
 import ReactTooltip from 'react-tooltip'
 import { useYearStore } from '@/app/store/yearStore'
+import { CommitData } from '@/app/store/githubInfoStore'
+import { COLORS } from '@/app/constants'
 
 const getColor = (count: number) => {
-  if (count === 0) return 'color-empty'
-  if (count < 5) return 'color-github-1'
-  if (count < 10) return 'color-github-2'
-  if (count < 15) return 'color-github-3'
-  return 'color-github-4'
-}
-
-interface Data {
-  date: string
-  count: number
+  if (count === 0) return COLORS.EMPTY
+  if (count < 5) return COLORS.GITHUB_1
+  if (count < 10) return COLORS.GITHUB_2
+  if (count < 15) return COLORS.GITHUB_3
+  return COLORS.GITHUB_4
 }
 
 interface HeatmapProps {
-  aggregatedData: Data[]
+  aggregatedData: CommitData[]
   year: number
   onChangeYear: (year: number) => void
 }

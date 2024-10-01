@@ -1,18 +1,8 @@
+import { TITLE_CONFIG } from '@/app/constants'
 import { useIsMobile } from '@/utils/isMobile'
 import { Center, OrbitControls, Text3D } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect, useState } from 'react'
-
-const TITLE_CONFIG = {
-  mobile: {
-    fontSize: 6,
-    text: 'Git\nme up',
-  },
-  desktop: {
-    fontSize: 10,
-    text: 'Git me up',
-  },
-}
 
 export default function Title() {
   const [fontSize, setFontSize] = useState(TITLE_CONFIG.desktop.fontSize)
